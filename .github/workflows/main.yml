@@ -1,0 +1,30 @@
+name: Username Checker
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check_usernames:
+    runs-on: ubuntu-latest
+    env:
+      TG_API_ID: ${{ secrets.TG_API_ID }}
+      TG_API_HASH: ${{ secrets.TG_API_HASH }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install dependencies
+        run: pip install telethon
+      - name: Run username checker
+        run: python code/checker.py
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: free_usernames
+          path: free.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: buyable_usernames
+          path: buyable.txt
